@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - UMKM Digital</title>
+    <!-- Custom CSS Links -->
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ===== PROFILE PAGE CUSTOM STYLES ===== */
+        .profile-container {
+            max-width: 1200px;
+            margin: 40px auto 64px auto;
+            padding: 0 4%;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        /* ===== SIDEBAR STYLES ===== */
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .summary-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 16px;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .avatar-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f5927, #1e824c);
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #0f5927;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #0f5927;
+        }
+
+        .avatar-edit-badge {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0f5927;
+            border: 2.5px solid white;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .avatar-edit-badge:hover {
+            transform: scale(1.1);
+            background: #0a3d1b;
+        }
+
+        .summary-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark, #111827);
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .summary-member {
+            font-size: 13px;
+            color: var(--text-grey, #6b7280);
+            margin-bottom: 16px;
+        }
+
+        .summary-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #effaf3;
+            color: #0f5927;
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid #d1fae5;
+        }
+
+        .nav-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .profile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-grey, #6b7280);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .profile-nav-link svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+            transition: stroke 0.2s ease;
+        }
+
+        .profile-nav-link:hover {
+            background: #f9fafb;
+            color: #0f5927;
+        }
+
+        .profile-nav-link.active {
+            background: #0f5927;
+            color: white;
+        }
+
+        /* ===== CONTENT AREA STYLES ===== */
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Tabs Navigation (Top) */
+        .profile-tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1.5px solid var(--border-color, #e5e7eb);
+            margin-bottom: 8px;
+            overflow-x: auto;
+        }
+
+        .profile-tab {
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-grey, #6b7280);
+            padding: 14px 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2.5px solid transparent;
+            margin-bottom: -1.5px;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .profile-tab:hover {
+            color: #0f5927;
+        }
+
+        .profile-tab.active {
+            color: #0f5927;
+            border-bottom-color: #0f5927;
+        }
+
+        /* Content Card & Form */
+        .content-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-card-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark, #111827);
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .section-card-desc {
+            font-size: 14px;
+            color: var(--text-grey, #6b7280);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border-color, #e5e7eb);
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            color: var(--text-dark, #111827);
+            background: #ffffff;
+        }
+
+        .form-input:focus {
+            border-color: #0f5927;
+            box-shadow: 0 0 0 3px rgba(15, 89, 39, 0.1);
+        }
+
+        .form-input:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1.5px solid #f3f4f6;
+            padding-top: 24px;
+            margin-top: 12px;
+        }
+
+        .last-modified {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-light-grey, #9ca3af);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            border: none;
+            background: #e8f5e9;
+            color: #0f5927;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-cancel:hover {
+            background: #c8e6c9;
+        }
+
+        .btn-submit {
+            border: none;
+            background: #0f5927;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(15, 89, 39, 0.15);
+            font-family: inherit;
+        }
+
+        .btn-submit:hover {
+            background: #0a3d1b;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(15, 89, 39, 0.25);
+        }
+
+        /* Sub Cards Row (Bottom) */
+        .sub-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .sub-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+        }
+
+        .sub-card-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sub-card-icon-wrapper.security {
+            background: #effaf3;
+            color: #0f5927;
+        }
+
+        .sub-card-icon-wrapper.payment {
+            background: #effaf3;
+            color: #0f5927;
+        }
+
+        .sub-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sub-card-text h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark, #111827);
+        }
+
+        .sub-card-text p {
+            font-size: 13.5px;
+            color: var(--text-grey, #6b7280);
+            line-height: 1.4;
+        }
+
+        .sub-card-link {
+            color: #0f5927;
+            font-size: 13.5px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 8px;
+            display: inline-block;
+            transition: color 0.2s ease;
+        }
+
+        .sub-card-link:hover {
+            color: #0a3d1b;
+            text-decoration: underline;
+        }
+
+        /* ===== ALERT SYSTEM ===== */
+        .profile-page-alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-page-alert.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .profile-page-alert.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Responsive Layout styles */
+        @media (max-width: 992px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+            .profile-sidebar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .nav-card {
+                margin-top: 0;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-sidebar {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .sub-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <!-- 1. Header Component (Top Navigation - Injected dynamically) -->
+    <header class="main-header"></header>
+
+    <!-- ===== MAIN PROFILE CONTENT ===== -->
+    <div class="profile-container">
+        <div class="profile-layout">
+            <!-- Left Sidebar -->
+            <aside class="profile-sidebar">
+                <!-- Summary Card -->
+                <div class="summary-card">
+                    <div class="avatar-wrapper" onclick="document.getElementById('avatarUploadInput').click()">
+                        <div class="avatar-circle" id="sidebarAvatarInitial">U</div>
+                        <img src="" alt="Avatar" id="sidebarAvatarImg" class="avatar-img" style="display:none;">
+                        <label class="avatar-edit-badge" for="avatarUploadInput" onclick="event.stopPropagation()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        </label>
+                        <input type="file" id="avatarUploadInput" accept="image/*" style="display:none;">
+                    </div>
+                    <h3 class="summary-name" id="sidebarFullName">Username</h3>
+                    <p class="summary-member" id="sidebarMemberSince">Member sejak Jan 2024</p>
+                    <span class="summary-badge" id="sidebarRoleBadge">Verified Buyer</span>
+                </div>
+                
+                <!-- Navigation Options Card -->
+                <div class="nav-card">
+                    <a href="#" class="profile-nav-link active" data-target="personal-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span>Informasi Pribadi</span>
+                    </a>
+                    <a href="#" class="profile-nav-link" data-target="security-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M12 2v9M8 5h8M6 14h.01M18 14h.01"></path></svg>
+                        <span>Keamanan</span>
+                    </a>
+                    <a href="#" class="profile-nav-link" data-target="address-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Alamat</span>
+                    </a>
+                    <a href="#" class="profile-nav-link" data-target="orders-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                        <span>Riwayat Pesanan</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Right Content Sections -->
+            <main class="profile-content">
+                <!-- Top Tabs -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" data-target="personal-info">Informasi Pribadi</button>
+                    <button class="profile-tab" data-target="security-info">Keamanan</button>
+                    <button class="profile-tab" data-target="address-info">Alamat</button>
+                    <button class="profile-tab" data-target="orders-info">Riwayat</button>
+                </div>
+
+                <!-- Page Alert Display -->
+                <div id="profilePageAlert" class="profile-page-alert" style="display:none;"></div>
+
+                <!-- SECTION 1: Personal Info -->
+                <section class="content-section" id="section-personal-info">
+                    <div class="content-card">
+                        <h2 class="section-card-title">Data Diri</h2>
+                        <p class="section-card-desc">Perbarui informasi profil Anda untuk pengalaman belanja yang lebih personal.</p>
+                        
+                        <form id="personalInfoForm" class="profile-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="inputFullName">Nama Lengkap</label>
+                                    <input type="text" class="form-input" id="inputFullName" placeholder="Ahmad Subarjo">
+                                </div>
+                                <div class="form-group" style="position: relative;">
+                                    <label class="form-label" for="inputEmail">Alamat Email</label>
+                                    <input type="email" class="form-input" id="inputEmail" placeholder="ahmad.subarjo@email.com" style="padding-right: 46px;">
+                                    <span class="email-verified-badge" id="emailVerifiedIcon" style="position: absolute; right: 16px; bottom: 12px; color: #10853e; display: flex; align-items: center; justify-content: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="inputPhone">Nomor Telepon</label>
+                                    <input type="text" class="form-input" id="inputPhone" placeholder="+62 812-3456-7890">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="inputBirthdate">Tanggal Lahir</label>
+                                    <input type="date" class="form-input" id="inputBirthdate">
+                                </div>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <span class="last-modified" id="txtLastModified">Terakhir diubah: baru saja</span>
+                                <div class="button-group">
+                                    <button type="button" class="btn-cancel" id="btnCancelPersonal">Batal</button>
+                                    <button type="submit" class="btn-submit">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Bottom Quick Links Sub Cards -->
+                    <div class="sub-cards-grid">
+                        <div class="sub-card">
+                            <div class="sub-card-icon-wrapper security">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M12 2v9M8 5h8M6 14h.01M18 14h.01"></path></svg>
+                            </div>
+                            <div class="sub-card-text">
+                                <h4>Keamanan Akun</h4>
+                                <p>Autentifikasi dua faktor aktif. Sesi terakhir dari Jakarta.</p>
+                                <a href="#" class="sub-card-link btn-link-tab" data-target="security-info">Kelola Keamanan</a>
+                            </div>
+                        </div>
+                        <div class="sub-card">
+                            <div class="sub-card-icon-wrapper payment">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                            </div>
+                            <div class="sub-card-text">
+                                <h4>Metode Pembayaran</h4>
+                                <p>Kartu Debit BRI & GoPay tersimpan sebagai metode utama.</p>
+                                <a href="#" class="sub-card-link">Tambah Metode</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Security -->
+                <section class="content-section" id="section-security-info" style="display:none;">
+                    <div class="content-card">
+                        <h2 class="section-card-title">Keamanan Akun</h2>
+                        <p class="section-card-desc">Kelola pengaturan keamanan akun Anda untuk melindungi akun dari akses yang tidak sah.</p>
+                        
+                        <form id="securityForm" class="profile-form">
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="form-label" for="inputCurrentPassword">Kata Sandi Lama</label>
+                                <input type="password" class="form-input" id="inputCurrentPassword" placeholder="Masukkan kata sandi lama Anda" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="inputNewPassword">Kata Sandi Baru</label>
+                                    <input type="password" class="form-input" id="inputNewPassword" placeholder="Masukkan kata sandi baru" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="inputConfirmPassword">Konfirmasi Kata Sandi Baru</label>
+                                    <input type="password" class="form-input" id="inputConfirmPassword" placeholder="Masukkan kembali kata sandi baru" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <span></span>
+                                <div class="button-group">
+                                    <button type="button" class="btn-cancel" id="btnCancelSecurity">Batal</button>
+                                    <button type="submit" class="btn-submit">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Address -->
+                <section class="content-section" id="section-address-info" style="display:none;">
+                    <div class="content-card">
+                        <h2 class="section-card-title">Alamat Pengiriman</h2>
+                        <p class="section-card-desc">Kelola alamat pengiriman untuk memudahkan proses checkout belanja Anda.</p>
+                        
+                        <form id="addressForm" class="profile-form">
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="form-label" for="inputAddress">Alamat Lengkap</label>
+                                <textarea class="form-input" id="inputAddress" rows="3" style="resize:vertical;" placeholder="Contoh: Jl. Merdeka No. 12, Bandung, Jawa Barat" required></textarea>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="inputPostalCode">Kode Pos</label>
+                                    <input type="text" class="form-input" id="inputPostalCode" placeholder="40111" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="inputReceiverPhone">Nomor Telepon Penerima</label>
+                                    <input type="text" class="form-input" id="inputReceiverPhone" placeholder="+62 812-3456-7890" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <span></span>
+                                <div class="button-group">
+                                    <button type="button" class="btn-cancel" id="btnCancelAddress">Batal</button>
+                                    <button type="submit" class="btn-submit">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: Order History -->
+                <section class="content-section" id="section-orders-info" style="display:none;">
+                    <div class="content-card" style="padding: 32px 0;">
+                        <h2 class="section-card-title" style="padding: 0 32px 12px 32px;">Riwayat Pesanan Anda</h2>
+                        
+                        <div style="padding: 0 32px; overflow-x: auto;">
+                            <table class="tx-table" style="width:100%; border-collapse: collapse; min-width: 500px;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e7eb; color: var(--text-grey); font-size: 12px; font-weight: 700; text-transform: uppercase;">No. Transaksi</th>
+                                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e7eb; color: var(--text-grey); font-size: 12px; font-weight: 700; text-transform: uppercase;">Tanggal</th>
+                                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e7eb; color: var(--text-grey); font-size: 12px; font-weight: 700; text-transform: uppercase;">Total</th>
+                                        <th style="text-align: left; padding: 12px; border-bottom: 2px solid #e5e7eb; color: var(--text-grey); font-size: 12px; font-weight: 700; text-transform: uppercase;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="profileTxTableBody">
+                                    <!-- Will be dynamically populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- 5. Footer Component (Injected dynamically) -->
+    <footer class="main-footer"></footer>
+
+    <!-- Scripts -->
+    <script src="../js/notification.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                // Redirect ke login jika belum masuk
+                window.location.href = 'login.html';
+                return;
+            }
+
+            let fullUserRecord = {};
+
+            // Display values helper
+            function showSuccessAlert(msg) {
+                const alertDiv = document.getElementById('profilePageAlert');
+                alertDiv.innerText = msg;
+                alertDiv.className = 'profile-page-alert success';
+                alertDiv.style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            // Display values helper
+            function showErrorAlert(msg) {
+                const alertDiv = document.getElementById('profilePageAlert');
+                alertDiv.innerText = msg;
+                alertDiv.className = 'profile-page-alert error';
+                alertDiv.style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            // Populate form and sidebar details
+            function loadUserData() {
+                fetch('../api/user/profile')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            fullUserRecord = data.user;
+
+                            // Sidebar Info
+                            const displayName = fullUserRecord.fullName || fullUserRecord.username;
+                            document.getElementById('sidebarFullName').innerText = displayName;
+                            document.getElementById('sidebarAvatarInitial').innerText = fullUserRecord.username.charAt(0).toUpperCase();
+                            document.getElementById('sidebarRoleBadge').innerText = fullUserRecord.role === 'admin' ? 'Verified Admin' : 'Verified Buyer';
+
+                            // Member Since Format
+                            const regDate = fullUserRecord.date_registered ? new Date(fullUserRecord.date_registered) : new Date();
+                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+                            document.getElementById('sidebarMemberSince').innerText = `Member sejak ${monthNames[regDate.getMonth()]} ${regDate.getFullYear()}`;
+
+                            // Form Values
+                            document.getElementById('inputFullName').value = fullUserRecord.fullName || '';
+                            document.getElementById('inputEmail').value = fullUserRecord.email || '';
+                            document.getElementById('inputPhone').value = fullUserRecord.phone || '';
+                            document.getElementById('inputBirthdate').value = fullUserRecord.birthdate || '';
+                            document.getElementById('txtLastModified').innerText = fullUserRecord.lastModified ? `Terakhir diubah: ${fullUserRecord.lastModified}` : 'Terakhir diubah: baru saja';
+
+                            // Security and Address inputs
+                            document.getElementById('inputAddress').value = fullUserRecord.address || '';
+                            document.getElementById('inputPostalCode').value = fullUserRecord.postalCode || '';
+                            document.getElementById('inputReceiverPhone').value = fullUserRecord.receiverPhone || '';
+
+                            // Avatar display
+                            const avatarImg = document.getElementById('sidebarAvatarImg');
+                            const avatarInitial = document.getElementById('sidebarAvatarInitial');
+                            if (fullUserRecord.avatar) {
+                                avatarImg.src = fullUserRecord.avatar;
+                                avatarImg.style.display = 'block';
+                                avatarInitial.style.display = 'none';
+                            } else {
+                                avatarImg.style.display = 'none';
+                                avatarInitial.style.display = 'flex';
+                            }
+                        } else {
+                            showErrorAlert(data.message || 'Gagal memuat profil.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error fetching profile:', err);
+                        showErrorAlert('Gagal menghubungkan ke server untuk mengambil profil.');
+                    });
+            }
+
+            // Save utility helper
+            function saveUserRecord(updatedFields) {
+                fetch('../api/user/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedFields)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        // Synchronize email and full details into currentUser local copy
+                        currentUser.email = updatedFields.email || currentUser.email;
+                        if (updatedFields.fullName) {
+                            currentUser.fullName = updatedFields.fullName;
+                        }
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        loadUserData();
+                    } else {
+                        showErrorAlert(data.message || 'Gagal menyimpan profil.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error saving profile:', err);
+                    showErrorAlert('Gagal menghubungkan ke server untuk menyimpan profil.');
+                });
+            }
+
+            // Load initial view
+            loadUserData();
+
+            // ===== INTERACTIVE TAB & SIDEBAR CLICK NAVIGATION =====
+            function switchSection(targetId) {
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(sec => sec.style.display = 'none');
+                // Show targeted section
+                const targetSec = document.getElementById('section-' + targetId);
+                if (targetSec) targetSec.style.display = 'block';
+
+                // Sync sidebar active status
+                document.querySelectorAll('.profile-nav-link').forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('data-target') === targetId);
+                });
+
+                // Sync top tab active status
+                document.querySelectorAll('.profile-tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.getAttribute('data-target') === targetId);
+                });
+            }
+
+            // Attach event listeners to sidebar navigation
+            document.querySelectorAll('.profile-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    switchSection(target);
+                });
+            });
+
+            // Attach event listeners to top tabs
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    switchSection(target);
+                });
+            });
+
+            // Attach event listeners to cross-links (e.g. Kelola Keamanan)
+            document.querySelectorAll('.btn-link-tab').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    switchSection(target);
+                });
+            });
+
+            // ===== AVATAR BASE64 UPLOAD =====
+            const avatarInput = document.getElementById('avatarUploadInput');
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    // Validate file type
+                    if (!file.type.startsWith('image/')) {
+                        showErrorAlert('File harus berupa gambar.');
+                        return;
+                    }
+
+                    // Validate file size (limit to 1.5MB for localStorage efficiency)
+                    if (file.size > 1.5 * 1024 * 1024) {
+                        showErrorAlert('Ukuran file terlalu besar. Batas maksimal adalah 1.5MB.');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const base64Data = evt.target.result;
+                        saveUserRecord({ avatar: base64Data });
+                        showSuccessAlert('Foto profil berhasil diperbarui!');
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // ===== PERSONAL INFO SUBMISSION =====
+            const personalForm = document.getElementById('personalInfoForm');
+            if (personalForm) {
+                personalForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const fullName = document.getElementById('inputFullName').value.trim();
+                    const email = document.getElementById('inputEmail').value.trim();
+                    const phone = document.getElementById('inputPhone').value.trim();
+                    const birthdate = document.getElementById('inputBirthdate').value;
+
+                    if (!email) {
+                        showErrorAlert('Alamat email wajib diisi.');
+                        return;
+                    }
+
+                    saveUserRecord({
+                        fullName: fullName,
+                        email: email,
+                        phone: phone,
+                        birthdate: birthdate
+                    });
+
+                    showSuccessAlert('Informasi pribadi berhasil disimpan!');
+                });
+
+                document.getElementById('btnCancelPersonal').addEventListener('click', function() {
+                    loadUserData();
+                    showSuccessAlert('Perubahan informasi pribadi dibatalkan.');
+                });
+            }
+
+            // ===== SECURITY FORM SUBMISSION =====
+            const securityForm = document.getElementById('securityForm');
+            if (securityForm) {
+                securityForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const currentPwdInput = document.getElementById('inputCurrentPassword');
+                    const newPwdInput = document.getElementById('inputNewPassword');
+                    const confirmPwdInput = document.getElementById('inputConfirmPassword');
+
+                    const oldPasswordVal = currentPwdInput.value;
+                    const newPasswordVal = newPwdInput.value;
+                    const confirmPasswordVal = confirmPwdInput.value;
+
+                    // Verify old password
+                    const realPassword = fullUserRecord.password || 'user'; // default mock
+                    if (oldPasswordVal !== realPassword) {
+                        showErrorAlert('Kata sandi lama Anda salah.');
+                        return;
+                    }
+
+                    // Verify passwords match
+                    if (newPasswordVal !== confirmPasswordVal) {
+                        showErrorAlert('Konfirmasi kata sandi baru tidak cocok.');
+                        return;
+                    }
+
+                    // Save new password
+                    saveUserRecord({ password: newPasswordVal });
+                    showSuccessAlert('Kata sandi berhasil diubah!');
+                    
+                    // Clear inputs
+                    currentPwdInput.value = '';
+                    newPwdInput.value = '';
+                    confirmPwdInput.value = '';
+                });
+
+                document.getElementById('btnCancelSecurity').addEventListener('click', function() {
+                    document.getElementById('inputCurrentPassword').value = '';
+                    document.getElementById('inputNewPassword').value = '';
+                    document.getElementById('inputConfirmPassword').value = '';
+                    showSuccessAlert('Perubahan kata sandi dibatalkan.');
+                });
+            }
+
+            // ===== ADDRESS FORM SUBMISSION =====
+            const addressForm = document.getElementById('addressForm');
+            if (addressForm) {
+                addressForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const address = document.getElementById('inputAddress').value.trim();
+                    const postalCode = document.getElementById('inputPostalCode').value.trim();
+                    const receiverPhone = document.getElementById('inputReceiverPhone').value.trim();
+
+                    saveUserRecord({
+                        address: address,
+                        postalCode: postalCode,
+                        receiverPhone: receiverPhone
+                    });
+
+                    showSuccessAlert('Alamat pengiriman berhasil diperbarui!');
+                });
+
+                document.getElementById('btnCancelAddress').addEventListener('click', function() {
+                    loadUserData();
+                    showSuccessAlert('Perubahan alamat dibatalkan.');
+                });
+            }
+
+            // ===== POPULATE TRANSACTION HISTORY =====
+            function loadTransactionList() {
+                const tbody = document.getElementById('profileTxTableBody');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+                
+                fetch('../api/transactions')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            const txs = data.transactions;
+                            if (txs.length === 0) {
+                                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-grey); padding:24px;">Belum ada pesanan dibuat.</td></tr>';
+                                return;
+                            }
+
+                            // Sort newest first
+                            const sorted = txs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+                            sorted.forEach(tx => {
+                                const dateStr = new Date(tx.date).toLocaleDateString('id-ID', {
+                                    year: 'numeric', month: 'short', day: 'numeric'
+                                });
+
+                                let statusClass = 'pending';
+                                if (tx.payment_status.toLowerCase() === 'selesai' || tx.payment_status.toLowerCase() === 'success') statusClass = 'success';
+                                if (tx.payment_status.toLowerCase() === 'dibatalkan' || tx.payment_status.toLowerCase() === 'failed') statusClass = 'failed';
+
+                                // Link resolver based on role/status
+                                let txLink = '#';
+                                if (currentUser.role === 'admin') {
+                                    txLink = `verifikasi-pembayaran.html?tx_id=${tx.id}`;
+                                } else {
+                                    if (tx.payment_status.toLowerCase() === 'pending') {
+                                        if (tx.payment_method === 'qris') {
+                                            txLink = `pembayaran-qris.html?tx_id=${tx.id}&total=${tx.total}`;
+                                        } else {
+                                            txLink = `upload-bukti.html?tx_id=${tx.id}&total=${tx.total}`;
+                                        }
+                                    } else {
+                                        txLink = `riwayat-transaksi.html`;
+                                    }
+                                }
+
+                                const label = tx.payment_status;
+
+                                tbody.innerHTML += `
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding:14px 12px;"><a href="${txLink}" style="color: #10853e; font-weight: bold; text-decoration: underline; font-size: 13.5px;">${tx.id}</a></td>
+                                        <td style="padding:14px 12px; font-size: 13.5px; color: #374151;">${dateStr}</td>
+                                        <td style="padding:14px 12px; font-size: 13.5px; color: #374151;">Rp ${tx.total.toLocaleString('id-ID')}</td>
+                                        <td style="padding:14px 12px;"><span class="status-badge ${statusClass}" style="padding: 4px 12px; border-radius: 99px; font-size: 11px; font-weight: 700; display: inline-block;">${label}</span></td>
+                                    </tr>
+                                `;
+                            });
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-grey); padding:24px;">Gagal memuat riwayat transaksi.</td></tr>';
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error fetching transactions:', err);
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-grey); padding:24px;">Gagal menghubungkan ke server untuk memuat transaksi.</td></tr>';
+                    });
+            }
+
+            // Load transactions initially
+            loadTransactionList();
+        });
+    </script>
+</body>
+</html>

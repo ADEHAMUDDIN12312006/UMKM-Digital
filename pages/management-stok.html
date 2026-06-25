@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Stok - Panel Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        .form-row { display:flex; gap:16px; }
+        .form-row .form-group { flex:1; }
+        .form-group { display:flex; flex-direction:column; gap:6px; }
+        .form-group label { font-size:13px; font-weight:700; color:#374151; }
+        .form-input { width:100%; padding:10px 12px; border:1px solid var(--border-color); border-radius:6px; outline:none; font-size:14px; font-family:'Inter',sans-serif; box-sizing:border-box; }
+        .form-input:focus { border-color:var(--primary-green); }
+        .stock-alert-banner {
+            background:linear-gradient(135deg,#fef3c7,#fde68a);
+            border:1px solid #fbbf24; border-radius:12px;
+            padding:16px 20px; margin-bottom:20px;
+            display:flex; align-items:center; gap:12px; display:none;
+        }
+        .stock-alert-banner svg { color:#d97706; flex-shrink:0; }
+        .stock-alert-text { font-size:14px; font-weight:700; color:#92400e; }
+        .stock-alert-sub { font-size:12px; color:#b45309; font-weight:500; margin-top:2px; }
+        .stock-qty-controls { display:flex; align-items:center; gap:6px; }
+        .stock-qty-btn { width:32px; height:32px; border-radius:6px; border:1px solid var(--border-color); background:#fff; cursor:pointer; font-size:18px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+        .stock-qty-btn:hover { background:var(--primary-green); color:#fff; border-color:var(--primary-green); }
+        .stock-input { width:60px; padding:6px; border:1px solid var(--border-color); border-radius:4px; font-weight:700; text-align:center; font-size:15px; }
+        .stock-low { color:#dc2626; font-weight:800; }
+    </style>
+</head>
+<body>
+<div class="admin-layout-wrapper">
+    <aside class="sidebar-admin-container"></aside>
+    <main class="admin-main-content">
+        <div class="admin-header-row">
+            <div class="admin-title-group">
+                <h1>Kelola Stok</h1>
+                <p>Pantau jumlah persediaan produk dan lakukan penyesuaian stok secara instan.</p>
+            </div>
+
+        </div>
+
+        <!-- Stok Hampir Habis Alert -->
+        <div class="stock-alert-banner" id="stockAlertBanner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+                <div class="stock-alert-text">⚠️ Stok Hampir Habis!</div>
+                <div class="stock-alert-sub" id="stockAlertDetail">Beberapa produk memiliki stok kurang dari 5 unit. Segera lakukan penambahan stok.</div>
+            </div>
+        </div>
+
+        <section class="admin-panel-card">
+            <div class="panel-header-row">
+                <h2 class="panel-title">Monitoring & Penyesuaian Stok</h2>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <span id="lowStockCount" style="background:#fee2e2;color:#dc2626;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;display:none;"></span>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nama Produk</th>
+                            <th>Kategori</th>
+                            <th>Harga</th>
+                            <th>Stok Saat Ini</th>
+                            <th>Status Stok</th>
+                            <th>Atur Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminStockTableBody">
+                        <!-- Diisi admin.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+
+
+<script src="../js/notification.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>

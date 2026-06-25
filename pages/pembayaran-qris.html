@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran QRIS - UMKM Digital</title>
+    <!-- Custom Styles Links -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/payment.css">
+</head>
+<body>
+    <!-- 1. Header Component (Top Navigation - Injected dynamically) -->
+    <header class="main-header"></header>
+
+    <main class="payment-container">
+        <div class="payment-card">
+            <h1 class="payment-title">Pembayaran QRIS</h1>
+            <p class="payment-subtitle">Silakan pindai kode QR di bawah menggunakan GoPay, OVO, Dana, LinkAja, atau Mobile Banking.</p>
+
+            <!-- Ticking Countdown Timer -->
+            <div class="timer-box">
+                <!-- Clock icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span id="countdownTimer">15:00</span>
+            </div>
+
+            <!-- QRIS Code Image Box -->
+            <div class="qris-wrapper">
+                <img src="../image/qris.png" alt="Merchant QRIS Code" class="qris-img">
+            </div>
+
+            <!-- Amount Block -->
+            <div class="amount-box">
+                <div class="amount-label">TOTAL PEMBAYARAN</div>
+                <div class="amount-value" id="paymentAmount">Rp 0</div>
+                <div style="font-size:12px; color:var(--text-grey); margin-top:6px; font-family:'Inter', sans-serif;">
+                    Nomor Transaksi: <strong id="paymentTxId">TX-XXXXX</strong>
+                </div>
+            </div>
+
+            <!-- Flow Progress Steps (Use Case) -->
+            <div style="margin: 20px 0 8px 0;">
+                <div style="display:flex; align-items:center; justify-content:center; gap:0; font-family:'Inter',sans-serif; font-size:11px; flex-wrap:wrap;">
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#0f5927; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">1</div>
+                        <span style="color:#0f5927; font-weight:700; text-align:center;">Pembayaran<br>QRIS</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#d1fae5; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#d1fae5; color:#6b7280; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">2</div>
+                        <span style="color:#6b7280; text-align:center;">Upload Bukti<br>Pembayaran</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#d1fae5; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#d1fae5; color:#6b7280; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">3</div>
+                        <span style="color:#6b7280; text-align:center;">Notifikasi</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#d1fae5; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#d1fae5; color:#6b7280; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">4</div>
+                        <span style="color:#6b7280; text-align:center;">Riwayat<br>Transaksi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Confirmation -->
+            <form id="paymentConfirmForm">
+                <button type="submit" class="btn-payment-confirm">
+                    <span>Sudah Membayar – Lanjut Upload Bukti</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- 5. Footer Component (Injected dynamically) -->
+    <footer class="main-footer"></footer>
+
+    <!-- Scripts -->
+    <script src="../js/notification.js"></script>
+    <script src="../js/payment.js"></script>
+</body>
+</html>

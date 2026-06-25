@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Transaksi - Panel Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        .form-row { display:flex; gap:16px; }
+        .form-group { display:flex; flex-direction:column; gap:6px; }
+        .form-group label { font-size:13px; font-weight:700; color:#374151; }
+        .form-input { width:100%; padding:10px 12px; border:1px solid var(--border-color); border-radius:6px; outline:none; font-size:14px; font-family:'Inter',sans-serif; box-sizing:border-box; }
+        .form-input:focus { border-color:var(--primary-green); }
+        .filter-bar { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
+        .filter-bar input, .filter-bar select { padding:10px 14px; border:1px solid var(--border-color); border-radius:8px; font-size:14px; font-family:'Inter',sans-serif; outline:none; }
+        .filter-bar input:focus, .filter-bar select:focus { border-color:var(--primary-green); }
+        .status-badge { display:inline-block; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; }
+        .status-badge.pending { background:#fef3c7; color:#92400e; }
+        .status-badge.diproses { background:#dbeafe; color:#1e40af; }
+        .status-badge.dikirim { background:#ede9fe; color:#5b21b6; }
+        .status-badge.selesai { background:#d1fae5; color:#065f46; }
+        .status-badge.success { background:#d1fae5; color:#065f46; }
+        .status-badge.dibatalkan { background:#fee2e2; color:#991b1b; }
+        .status-badge.failed { background:#fee2e2; color:#991b1b; }
+        .detail-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border-color); font-size:14px; }
+        .detail-row:last-child { border-bottom:none; }
+        .detail-label { color:var(--text-grey); font-weight:600; }
+        .detail-value { font-weight:700; color:var(--text-dark); }
+    </style>
+</head>
+<body>
+<div class="admin-layout-wrapper">
+    <aside class="sidebar-admin-container"></aside>
+    <main class="admin-main-content">
+        <div class="admin-header-row">
+            <div class="admin-title-group">
+                <h1>Kelola Transaksi</h1>
+                <p>Pantau, filter, dan ubah status setiap transaksi yang masuk ke platform.</p>
+            </div>
+        </div>
+
+        <section class="admin-panel-card">
+            <div class="panel-header-row">
+                <h2 class="panel-title">Daftar Transaksi</h2>
+                <span id="txTotalCount" style="font-size:13px;color:var(--text-grey);font-weight:600;"></span>
+            </div>
+            <!-- Search & Filter Bar -->
+            <div class="filter-bar">
+                <div style="position:relative;flex:1;min-width:200px;">
+                    <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchTx" placeholder="Cari No. Transaksi atau Pelanggan..." style="padding-left:38px;width:100%;">
+                </div>
+                <select id="filterTxStatus" style="min-width:160px;">
+                    <option value="">Semua Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Selesai">Selesai</option>
+                    <option value="Dibatalkan">Dibatalkan</option>
+                    <option value="Success">Success</option>
+                </select>
+                <input type="date" id="filterTxDate" style="min-width:150px;">
+                <button class="btn-admin secondary" id="btnClearFilter" style="padding:10px 16px;white-space:nowrap;">Reset Filter</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>No. Transaksi</th>
+                            <th>Pelanggan</th>
+                            <th>Produk Dipesan</th>
+                            <th>Total Bayar</th>
+                            <th>Metode</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTxsTableBody">
+                        <!-- Diisi admin.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal Detail Transaksi -->
+<div class="modal-overlay" id="txDetailModal" style="display:none;">
+    <div class="modal-card" style="max-width:580px;">
+        <div class="modal-header">
+            <h3>Detail Transaksi</h3>
+            <button type="button" onclick="document.getElementById('txDetailModal').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--text-grey);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body" id="txDetailBody">
+            <!-- Diisi admin.js -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-admin secondary" onclick="document.getElementById('txDetailModal').style.display='none'">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ubah Status Transaksi -->
+<div class="modal-overlay" id="txStatusModal" style="display:none;">
+    <div class="modal-card" style="max-width:420px;">
+        <div class="modal-header">
+            <h3>Ubah Status Transaksi</h3>
+            <button type="button" onclick="document.getElementById('txStatusModal').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--text-grey);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="statusTxId">
+            <div class="form-group">
+                <label>No. Transaksi</label>
+                <div id="statusTxIdDisplay" style="font-size:14px;font-weight:700;color:var(--text-dark);padding:10px;background:#f8fafc;border-radius:6px;border:1px solid var(--border-color);"></div>
+            </div>
+            <div class="form-group">
+                <label for="newTxStatus">Status Baru</label>
+                <select id="newTxStatus" class="form-input">
+                    <option value="Pending">Pending</option>
+                    <option value="Diproses">Diproses</option>
+                    <option value="Dikirim">Dikirim</option>
+                    <option value="Selesai">Selesai</option>
+                    <option value="Dibatalkan">Dibatalkan</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-admin secondary" onclick="document.getElementById('txStatusModal').style.display='none'">Batal</button>
+            <button type="button" class="btn-admin primary" id="confirmStatusBtn">Simpan Status</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/notification.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>

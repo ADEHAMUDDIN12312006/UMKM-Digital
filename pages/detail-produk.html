@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tas Anyaman Rotan Premium - UMKM Digital</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/product.css">
+<base target="_blank">
+    <style>
+        .profile-dropdown-wrapper {
+            position: relative;
+        }
+        .profile-dropdown a:hover {
+            background: #f3f4f6;
+            color: #0f5927;
+        }
+        .profile-dropdown a:first-child:hover {
+            color: #0f5927;
+        }
+
+        /* Review Section styling */
+        .reviews-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 24px;
+            font-family: 'Inter', sans-serif;
+        }
+        .reviews-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .reviews-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+        }
+        @media (max-width: 768px) {
+            .reviews-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+        .rating-summary-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            height: fit-content;
+        }
+        .rating-big-num {
+            font-size: 48px;
+            font-weight: 800;
+            color: #0f5927;
+            line-height: 1;
+        }
+        .rating-big-stars {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 12px 0 8px 0;
+            color: #fbbf24;
+        }
+        .rating-summary-text {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .rating-bar-row span {
+            width: 12px;
+            text-align: right;
+            font-weight: 700;
+        }
+        .rating-bar-track {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .rating-bar-fill {
+            height: 100%;
+            background: #fbbf24;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .write-review-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .write-review-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .star-rating-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: flex-start;
+        }
+        .star-rating-selector button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #cbd5e1;
+            padding: 0;
+            transition: transform 0.1s;
+        }
+        .star-rating-selector button:hover {
+            transform: scale(1.15);
+        }
+        .star-rating-selector button.active {
+            color: #fbbf24;
+        }
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+        .form-input-text {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1e293b;
+            box-sizing: border-box;
+            background: #fff;
+        }
+        .form-input-text:focus {
+            outline: none;
+            border-color: #0f5927;
+            box-shadow: 0 0 0 3px rgba(15, 89, 39, 0.1);
+        }
+        .btn-submit-review {
+            width: 100%;
+            background: #0f5927;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-submit-review:hover {
+            background: #0d4e22;
+        }
+        .reviews-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .review-item-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+            transition: box-shadow 0.2s;
+            text-align: left;
+        }
+        .review-item-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .review-author-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .review-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .review-author-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .review-stars {
+            display: flex;
+            gap: 2px;
+            color: #fbbf24;
+        }
+        .review-date {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .review-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.5;
+            margin-top: 8px;
+            white-space: pre-wrap;
+        }
+        .empty-reviews-state {
+            text-align: center;
+            padding: 48px;
+            color: #64748b;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            font-size: 14px;
+            background: #fff;
+        }
+    </style>
+<base target="_blank">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="brand-section">
+            <a href="../index.html" class="brand-logo">UMKM Digital</a>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="../index.html#product-section" class="nav-link active">Products</a></li>
+            </ul>
+        </div>
+
+        <div class="header-actions">
+            <button class="action-btn" aria-label="Keranjang belanja" onclick="window.location.href='keranjang.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-badge">2</span>
+            </button>
+
+            <a href="notifikasi.html" class="action-btn" aria-label="Notifikasi" style="text-decoration:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+            </a>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-dropdown-wrapper" style="position: relative;">
+                <button class="user-profile" id="profileBtn" aria-label="Profil" style="border: none; background: transparent; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="#0f5927" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none; position: absolute; right: 0; top: 48px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 180px; z-index: 1001; padding: 8px 0; overflow: hidden;">
+                    <a href="dashboard-pembeli.html" style="display: block; padding: 12px 16px; font-size: 14px; color: #374151; text-decoration: none; transition: background 0.2s;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px; margin-top: -2px;">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        Dashboard Saya
+                    </a>
+                    <div style="border-top: 1px solid #f3f4f6; margin: 4px 0;"></div>
+                    <a href="#" id="logoutLink" style="display: block; padding: 12px 16px; font-size: 14px; color: #ef4444; text-decoration: none; transition: background 0.2s;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px; margin-top: -2px;">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Keluar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="#">Kerajinan</a>
+        <span class="breadcrumb-separator">›</span>
+        <span aria-current="page">Tas Anyaman Rotan</span>
+    </nav>
+
+    <main class="product-detail-container">
+        <section class="gallery-side">
+            <div class="main-image-box">
+                <img id="mainProductImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmM2Y0ZjYiLz48cGF0aCBkPSJNMzAgMzBoNDB2NDBIMzB6IiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiNkMWQ1ZGIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjOWNhM2FmIi8+PC9zdmc+"
+                    alt="Tas Anyaman Rotan Premium Khas Kalimantan"
+                    onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmM2Y0ZjYiLz48cGF0aCBkPSJNMzAgMzBoNDB2NDBIMzB6IiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiNkMWQ1ZGIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjOWNhM2FmIi8+PC9zdmc+';">
+
+                <div class="gallery-actions">
+                    <button class="gallery-action-btn btn-wishlist-gallery" aria-label="Tambah ke wishlist"
+                        id="btnWishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                    <button class="gallery-action-btn btn-share-gallery" aria-label="Bagikan produk">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="thumbnail-row">
+                <div class="thumbnail-card active" aria-label="Lihat gambar utama">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmM2Y0ZjYiLz48cGF0aCBkPSJNMzAgMzBoNDB2NDBIMzB6IiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiNkMWQ1ZGIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjOWNhM2FmIi8+PC9zdmc+" alt="Tas Anyaman Rotan Premium Khas Kalimantan"
+                        onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmM2Y0ZjYiLz48cGF0aCBkPSJNMzAgMzBoNDB2NDBIMzB6IiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiNkMWQ1ZGIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjOWNhM2FmIi8+PC9zdmc+';">
+                </div>
+                <div class="thumbnail-card" aria-label="Lihat ulasan kualitas">
+                    <svg viewBox="0 0 100 100">
+                        <rect width="100" height="100" fill="#f8fafc" />
+                        <rect x="25" y="20" width="50" height="60" rx="3" fill="#ffffff" stroke="#cbd5e1"
+                            stroke-width="2" />
+                        <circle cx="40" cy="35" r="5" fill="#10853e" />
+                        <line x1="50" y1="35" x2="70" y2="35" stroke="#cbd5e1" stroke-width="2" />
+                        <line x1="30" y1="50" x2="70" y2="50" stroke="#cbd5e1" stroke-width="2" />
+                        <line x1="30" y1="60" x2="70" y2="60" stroke="#cbd5e1" stroke-width="2" />
+                        <line x1="30" y1="70" x2="55" y2="70" stroke="#cbd5e1" stroke-width="2" />
+                    </svg>
+                </div>
+                <div class="thumbnail-card" aria-label="Lihat asal pengrajin">
+                    <svg viewBox="0 0 100 100">
+                        <rect width="100" height="100" fill="#f8fafc" />
+                        <circle cx="50" cy="50" r="28" fill="none" stroke="#38bdf8" stroke-width="2" />
+                        <path
+                            d="M50 32c-6.6 0-12 5.4-12 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4s4 1.8 4 4s-1.8 4-4 4z"
+                            fill="#38bdf8" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="info-side">
+            <span class="category-badge">Kerajinan</span>
+
+            <div>
+                <h1 class="product-title">Tas Anyaman Rotan Premium</h1>
+                <div class="rating-stock-row" style="margin-top: 10px;">
+                    <div class="rating-stars">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                        <strong>4.9</strong>
+                        <span>(128 Ulasan)</span>
+                    </div>
+                    <span class="divider-pipe"></span>
+                    <span class="stock-count">15 tersedia</span>
+                </div>
+            </div>
+
+            <div class="product-price-box">
+                <span>Rp 250.000</span>
+            </div>
+
+            <div class="purchase-form-block">
+                <div class="quantity-row">
+                    <span class="quantity-label">JUMLAH</span>
+                    <div class="quantity-selector-container">
+                        <div class="quantity-selector">
+                            <button type="button" class="qty-btn" id="btnMinus">−</button>
+                            <input type="text" class="qty-input" id="qtyInput" value="1" readonly>
+                            <button type="button" class="qty-btn" id="btnPlus">+</button>
+                        </div>
+                        <span class="stock-status-tag">Stok Terbatas</span>
+                    </div>
+                </div>
+
+                <div class="purchase-action-group">
+                    <a href="keranjang.html" class="btn-add-to-cart" id="btnAddToCart"
+                        style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                        <span>Tambah ke Keranjang</span>
+                    </a>
+                    <a href="checkout.html" class="btn-buy-now">Beli Sekarang</a>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <h3 class="details-title">Detail Produk</h3>
+                <p class="details-description">Tas anyaman tangan dari rotan pilihan oleh pengrajin lokal Kalimantan.
+                    Setiap detail dibuat dengan ketelitian tinggi, menggabungkan teknik tradisional dengan desain
+                    kontemporer yang elegan.</p>
+                <p class="details-description" style="margin-top: 8px;">Material rotan yang digunakan telah melalui
+                    proses pengeringan alami untuk menjamin ketahanan dan kekuatan. Bagian dalam dilapisi kain batik
+                    halus untuk menambah kesan eksklusif dan melindungi barang bawaan Anda.</p>
+
+                <ul class="specs-list">
+                    <li class="specs-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Handmade 100% oleh pengrajin UMKM</span>
+                    </li>
+                    <li class="specs-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Material: Rotan Alami Grade A</span>
+                    </li>
+                    <li class="specs-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Dimensi: 25cm x 15cm x 20cm</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="merchant-detail-card">
+                <div class="merchant-detail-left">
+                    <div class="merchant-detail-avatar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f5927" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="merchant-detail-name">
+                        <h4>Artisan Borneo</h4>
+                        <p>Pontianak, Kalimantan Barat</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-visit-store">Kunjungi Toko</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Section Ulasan Produk -->
+    <section class="reviews-section">
+        <h2 class="reviews-title">Ulasan Pembeli</h2>
+        <div class="reviews-layout">
+            <!-- Sisi Kiri: Ringkasan & Form -->
+            <div class="reviews-left-side">
+                <div class="rating-summary-card">
+                    <div class="rating-big-num" id="avgRatingNum">0.0</div>
+                    <div class="rating-big-stars" id="avgRatingStars">
+                        <!-- Diisi JavaScript -->
+                    </div>
+                    <div class="rating-summary-text" id="totalReviewsCount">Berdasarkan 0 ulasan</div>
+                    
+                    <div class="rating-bars" id="ratingBarsContainer">
+                        <!-- Diisi JavaScript -->
+                    </div>
+                </div>
+
+                <div class="write-review-card">
+                    <h3 class="write-review-title">Tulis Ulasan Anda</h3>
+                    <form id="addReviewForm">
+                        <div class="form-group">
+                            <label>Rating Produk</label>
+                            <div class="star-rating-selector" id="starRatingSelector">
+                                <button type="button" data-val="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </button>
+                                <button type="button" data-val="2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </button>
+                                <button type="button" data-val="3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </button>
+                                <button type="button" data-val="4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </button>
+                                <button type="button" data-val="5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewAuthor">Nama Anda</label>
+                            <input type="text" id="reviewAuthor" class="form-input-text" placeholder="Masukkan nama Anda" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewContent">Isi Ulasan</label>
+                            <textarea id="reviewContent" class="form-input-text" rows="4" placeholder="Bagikan pengalaman Anda menggunakan produk ini..." required style="resize:vertical;"></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit-review">Kirim Ulasan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sisi Kanan: Daftar Ulasan -->
+            <div class="reviews-right-side">
+                <div class="reviews-list-container" id="reviewsList">
+                    <!-- Diisi JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="recommendation-section">
+        <h2 class="recommendation-title">Mungkin Anda Suka</h2>
+
+        <div class="recommendation-grid">
+            <article class="product-card">
+                <div class="card-img-wrapper">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                        <rect width="200" height="200" fill="#0d1117" />
+                        <ellipse cx="100" cy="110" rx="60" ry="40" fill="#161b22" />
+                        <ellipse cx="100" cy="110" rx="50" ry="30" fill="none" stroke="#58a6ff" stroke-width="2" />
+                        <ellipse cx="100" cy="110" rx="40" ry="22" fill="none" stroke="#56b4e9" stroke-width="1.5"
+                            stroke-dasharray="8,4" />
+                        <ellipse cx="100" cy="105" rx="30" ry="16" fill="#0366d6" opacity="0.8" />
+                        <circle cx="100" cy="98" r="8" fill="#58a6ff" />
+                    </svg>
+                    <button class="btn-wishlist" aria-label="Tambah ke wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <span class="card-category">Kerajinan</span>
+                    <h3 class="card-title">Topi Pantai Rotan</h3>
+                    <div class="card-price">Rp 120.000</div>
+                    <a href="detail-produk.html?id=prod_1" class="btn-card-detail">Lihat Detail</a>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <div class="card-img-wrapper">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                        <rect width="200" height="200" fill="#0d1117" />
+                        <rect x="40" y="45" width="120" height="80" rx="4" fill="#161b22" stroke="#30363d"
+                            stroke-width="2" />
+                        <rect x="46" y="51" width="108" height="68" fill="#0d1117" />
+                        <rect x="54" y="90" width="12" height="22" fill="#58a6ff" />
+                        <rect x="72" y="75" width="12" height="37" fill="#58a6ff" opacity="0.8" />
+                        <rect x="90" y="65" width="12" height="47" fill="#30363d" />
+                        <rect x="108" y="80" width="12" height="32" fill="#58a6ff" />
+                        <rect x="126" y="70" width="12" height="42" fill="#58a6ff" opacity="0.6" />
+                        <path d="M30 125 L170 125 L180 142 L20 142 Z" fill="#21262d" stroke="#30363d"
+                            stroke-width="1.5" />
+                        <rect x="85" y="126" width="30" height="4" rx="1" fill="#30363d" />
+                    </svg>
+                    <button class="btn-wishlist" aria-label="Tambah ke wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <span class="card-category">Kerajinan</span>
+                    <h3 class="card-title">Dompet Etnik</h3>
+                    <div class="card-price">Rp 85.000</div>
+                    <a href="detail-produk.html?id=prod_2" class="btn-card-detail">Lihat Detail</a>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <div class="card-img-wrapper">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                        <rect width="200" height="200" fill="#0d1117" />
+                        <circle cx="100" cy="100" r="60" fill="url(#globeGrad)" stroke="#30363d" stroke-width="1.5" />
+                        <path d="M40 100 Q100 70 160 100 Q100 130 40 100 Z" fill="none" stroke="#58a6ff"
+                            stroke-width="1" opacity="0.6" />
+                        <path d="M40 100 Q100 40 160 100 Q100 160 40 100 Z" fill="none" stroke="#58a6ff"
+                            stroke-width="0.8" opacity="0.4" />
+                        <path d="M100 40 Q70 100 100 160 Q130 100 100 40 Z" fill="none" stroke="#58a6ff"
+                            stroke-width="1" opacity="0.6" />
+                        <circle cx="110" cy="85" r="3" fill="#ff7b72" filter="blur(1px)" />
+                        <defs>
+                            <radialGradient id="globeGrad" cx="40%" cy="40%" r="60%">
+                                <stop offset="0%" stop-color="#1f6feb" />
+                                <stop offset="40%" stop-color="#0f2b5c" />
+                                <stop offset="100%" stop-color="#0d1117" />
+                            </radialGradient>
+                        </defs>
+                    </svg>
+                    <button class="btn-wishlist" aria-label="Tambah ke wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <span class="card-category">Kerajinan</span>
+                    <h3 class="card-title">Sandal Kayu Lukis</h3>
+                    <div class="card-price">Rp 175.000</div>
+                    <a href="detail-produk.html?id=prod_3" class="btn-card-detail">Lihat Detail</a>
+                </div>
+            </article>
+
+            <article class="product-card">
+                <div class="card-img-wrapper">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                        <rect width="200" height="200" fill="#0d1117" />
+                        <circle cx="100" cy="100" r="50" fill="none" stroke="#1f6feb" stroke-width="4" opacity="0.2" />
+                        <circle cx="100" cy="100" r="40" fill="none" stroke="#58a6ff" stroke-width="3" opacity="0.4" />
+                        <circle cx="100" cy="100" r="30" fill="none" stroke="#58a6ff" stroke-width="2" opacity="0.7" />
+                        <circle cx="100" cy="100" r="20" fill="none" stroke="#56b4e9" stroke-width="1.5" />
+                        <circle cx="100" cy="100" r="8" fill="#58a6ff" />
+                    </svg>
+                    <button class="btn-wishlist" aria-label="Tambah ke wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-content">
+                    <span class="card-category">Kerajinan</span>
+                    <h3 class="card-title">Tatakan Gelas Bambu</h3>
+                    <div class="card-price">Rp 45.000</div>
+                    <a href="detail-produk.html?id=prod_4" class="btn-card-detail">Lihat Detail</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-left">
+            <a href="../index.html" class="footer-brand">UMKM Digital</a>
+            <p class="footer-copyright">&copy; 2024 UMKM Digital Platform. Empowering Local Business. Proudly made in
+                Indonesia.</p>
+        </div>
+
+        <div class="footer-right">
+            <ul class="footer-links">
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Help Center</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        // Profile Dropdown Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileBtn = document.getElementById('profileBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const logoutLink = document.getElementById('logoutLink');
+
+            if (profileBtn && profileDropdown) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isVisible = profileDropdown.style.display === 'block';
+                    profileDropdown.style.display = isVisible ? 'none' : 'block';
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.style.display = 'none';
+                    }
+                });
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('currentUser');
+                    alert('Anda telah keluar.');
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+    </script>
+    <script src="../js/notification.js"></script>
+    <script src="../js/product.js"></script>
+</body>
+
+</html>

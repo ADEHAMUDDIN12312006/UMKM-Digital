@@ -1,0 +1,499 @@
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    padding: 20px 4% 12px 4%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-grey);
+}
+
+.breadcrumb-nav a {
+    color: var(--text-grey);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-nav a:hover {
+    color: var(--primary-green);
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: var(--text-light-grey);
+}
+
+/* Product Detail Two Column Container */
+.product-detail-container {
+    display: flex;
+    gap: 48px;
+    padding: 0 4% 56px 4%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* Left Column - Gallery Section */
+.gallery-side {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.main-image-box {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Hover Zoom on Gallery Image */
+.main-image-box img {
+    transition: transform 0.5s ease;
+}
+
+.main-image-box:hover img {
+    transform: scale(1.03);
+}
+
+/* Float Actions inside Gallery */
+.gallery-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+}
+
+.gallery-action-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.gallery-action-btn:hover {
+    background-color: #ffffff;
+    color: #ef4444;
+    transform: scale(1.08);
+}
+
+.gallery-action-btn.btn-share-gallery:hover {
+    color: var(--primary-green);
+}
+
+/* Thumbnail Strip */
+.thumbnail-row {
+    display: flex;
+    gap: 16px;
+}
+
+.thumbnail-card {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thumbnail-card img, 
+.thumbnail-card svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.thumbnail-card.active {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(15, 89, 39, 0.1);
+}
+
+.thumbnail-card:hover {
+    border-color: #d1d5db;
+}
+
+/* Right Column - Product Purchase side */
+.info-side {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+
+.rating-stock-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-grey);
+}
+
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #f59e0b;
+}
+
+.rating-stars svg {
+    fill: #f59e0b;
+}
+
+.divider-pipe {
+    width: 1px;
+    height: 14px;
+    background-color: var(--border-color);
+}
+
+.stock-count {
+    color: var(--text-grey);
+}
+
+.product-price-box {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-green);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+/* Quantity Selector Form Block */
+.purchase-form-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.quantity-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quantity-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-grey);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.quantity-selector-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.qty-btn {
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.qty-btn:hover {
+    background-color: var(--bg-light);
+}
+
+.qty-input {
+    width: 50px;
+    height: 44px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    outline: none;
+    color: var(--text-dark);
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stock-status-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* Purchase Action Buttons */
+.purchase-action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-add-to-cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-green);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(15, 89, 39, 0.12);
+}
+
+.btn-add-to-cart:hover {
+    background-color: var(--hover-green);
+    box-shadow: 0 6px 18px rgba(15, 89, 39, 0.22);
+    transform: translateY(-1px);
+}
+
+.btn-add-to-cart:active {
+    transform: translateY(1px);
+}
+
+.btn-buy-now {
+    width: 100%;
+    padding: 15px;
+    background-color: #ffffff;
+    color: var(--primary-green);
+    border: 1.5px solid var(--primary-green);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-buy-now:hover {
+    background-color: #f0faf4;
+    border-color: var(--hover-green);
+    color: var(--hover-green);
+}
+
+/* Details & Specs */
+.details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.details-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.details-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    color: var(--text-grey);
+    line-height: 1.6;
+}
+
+.specs-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.specs-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-grey);
+}
+
+.specs-item svg {
+    color: var(--primary-green);
+    flex-shrink: 0;
+}
+
+/* Merchant Borneo Card */
+.merchant-detail-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 20px;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.merchant-detail-card:hover {
+    border-color: #d1d5db;
+}
+
+.merchant-detail-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.merchant-detail-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--border-color);
+    background-color: #e8f5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.merchant-detail-name h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+}
+
+.merchant-detail-name p {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-grey);
+}
+
+.btn-visit-store {
+    padding: 8px 16px;
+    border: 1.5px solid var(--primary-green);
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: var(--primary-green);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-visit-store:hover {
+    background-color: #f0faf4;
+}
+
+/* Recommendation Bottom Grid */
+.recommendation-section {
+    padding: 56px 4%;
+    border-top: 1px solid var(--border-color);
+    background-color: #ffffff;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.recommendation-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+}
+
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+/* Responsive configurations */
+@media (max-width: 992px) {
+    .product-detail-container {
+        flex-direction: column;
+        gap: 32px;
+    }
+    .gallery-side {
+        width: 100%;
+    }
+    .info-side {
+        width: 100%;
+    }
+    .recommendation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .recommendation-grid {
+        grid-template-columns: 1fr;
+    }
+    .thumbnail-row {
+        gap: 12px;
+    }
+    .thumbnail-card {
+        width: 70px;
+        height: 70px;
+    }
+}

@@ -1,0 +1,450 @@
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Color Variables */
+:root {
+    --primary-green: #0f5927;
+    --accent-green: #0f5927;
+    --hover-green: #0a3d1b;
+    --text-dark: #111827;
+    --text-grey: #6b7280;
+    --text-light-grey: #9ca3af;
+    --border-color: #e5e7eb;
+    --input-bg: #f9fafb;
+    --focus-ring: rgba(15, 89, 39, 0.15);
+}
+
+/* Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Main Split Screen Container */
+.login-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Left Side - Illustration & Value Proposition */
+.left-panel {
+    width: 50%;
+    background: radial-gradient(circle at 10% 20%, #f0faf4 0%, #ffffff 90%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 60px;
+    position: relative;
+    border-right: 1px solid var(--border-color);
+}
+
+.left-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 540px;
+    width: 100%;
+}
+
+.illustration-wrapper {
+    width: 100%;
+    margin-bottom: 35px;
+    filter: drop-shadow(0px 15px 30px rgba(15, 89, 39, 0.08));
+}
+
+.illustration-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+}
+
+.left-typography {
+    text-align: center;
+    padding: 0 10px;
+}
+
+.left-headline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-green);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+}
+
+.left-subheadline {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-grey);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.left-footer {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-grey);
+    font-weight: 500;
+}
+
+.badge svg {
+    color: var(--text-grey);
+    flex-shrink: 0;
+}
+
+/* Right Side - Login Form Interface */
+.right-panel {
+    width: 50%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.pin-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.pin-icon-wrapper svg {
+    color: #10853e;
+    filter: drop-shadow(0px 4px 6px rgba(16, 133, 62, 0.15));
+}
+
+.form-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.form-subtitle {
+    font-size: 15px;
+    color: var(--text-grey);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Form Styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.input-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.forgot-password-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-green);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+    color: var(--hover-green);
+    text-decoration: underline;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-field {
+    width: 100%;
+    padding: 14px 16px 14px 44px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-field::placeholder {
+    color: var(--text-light-grey);
+}
+
+.input-field:focus {
+    border-color: var(--primary-green);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.input-icon-left {
+    position: absolute;
+    left: 14px;
+    color: var(--text-light-grey);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-icon-right {
+    position: absolute;
+    right: 14px;
+    color: var(--text-grey);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.input-icon-right:hover {
+    color: var(--text-dark);
+}
+
+/* Checkbox Style */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.custom-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.checkbox-group input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-group input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.custom-checkbox svg {
+    color: #ffffff;
+    display: none;
+}
+
+.checkbox-group input[type="checkbox"]:checked + .custom-checkbox svg {
+    display: block;
+}
+
+.checkbox-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-grey);
+    user-select: none;
+    cursor: pointer;
+}
+
+/* Primary Login Button */
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-green);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(15, 89, 39, 0.15);
+}
+
+.btn-submit:hover {
+    background-color: var(--hover-green);
+    box-shadow: 0 6px 16px rgba(15, 89, 39, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* Divider styling */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 32px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.divider:not(:empty)::before {
+    margin-right: 16px;
+}
+
+.divider:not(:empty)::after {
+    margin-left: 16px;
+}
+
+.divider-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-light-grey);
+    letter-spacing: 0.1em;
+}
+
+/* Social Login Buttons */
+.social-login-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 36px;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-social:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-social:active {
+    background-color: #f3f4f6;
+}
+
+.btn-social svg {
+    flex-shrink: 0;
+}
+
+/* Right Footer style */
+.form-footer {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-grey);
+}
+
+.register-link {
+    font-weight: 700;
+    color: var(--primary-green);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.register-link:hover {
+    color: var(--hover-green);
+    text-decoration: underline;
+}
+
+/* Responsiveness Settings */
+@media (max-width: 992px) {
+    .left-panel {
+        display: none;
+    }
+    .right-panel {
+        width: 100%;
+        padding: 40px 24px;
+    }
+    .form-container {
+        max-width: 440px;
+    }
+}

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Produk - Panel Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        /* ── Form Layout ── */
+        .form-row { display:flex; gap:14px; }
+        .form-row .form-group { flex:1; }
+        .form-group { display:flex; flex-direction:column; gap:6px; }
+
+        /* Label dengan ikon */
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .form-group label svg { color: var(--primary-green); }
+
+        /* Input field */
+        .form-input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            background: #fafafa;
+            color: #111827;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .form-input:focus {
+            border-color: var(--primary-green);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(16,133,62,0.10);
+        }
+        textarea.form-input { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+        /* Search bar */
+        .search-bar { display:flex; gap:12px; margin-bottom:20px; align-items:center; }
+        .search-bar input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            background: #fafafa;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-bar input:focus { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(16,133,62,0.10); background:#fff; }
+        .img-preview { width:60px; height:60px; object-fit:cover; border-radius:10px; border:1px solid #e5e7eb; }
+
+        /* ── Upload Area ── */
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 14px;
+            padding: 28px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: #f8fafc;
+            position: relative;
+        }
+        .upload-area:hover { border-color: var(--primary-green); background: #f0fdf4; }
+        .upload-area input[type=file] { display:none; }
+        .upload-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: #e9faf0;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px;
+            transition: background 0.2s;
+        }
+        .upload-area:hover .upload-icon-wrap { background: #bbf7d0; }
+
+        /* ── Modal Redesign ── */
+        #productModal .modal-card {
+            max-width: 640px;
+            max-height: 92vh;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.18);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalSlideIn 0.25s cubic-bezier(0.22,1,0.36,1);
+        }
+        #productModal form {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        #productModal .modal-body {
+            overflow-y: auto;
+            flex: 1;
+        }
+        #productModal .modal-footer {
+            flex-shrink: 0;
+        }
+        @keyframes modalSlideIn {
+            from { opacity:0; transform:translateY(24px) scale(0.97); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+
+        /* Gradient Header */
+        #productModal .modal-header {
+            background: linear-gradient(135deg, #10853e 0%, #059669 100%);
+            border-bottom: none;
+            padding: 22px 28px;
+        }
+        #productModal .modal-header h3 {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #productModal .modal-header h3::before {
+            content: '';
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+        }
+        #productModal #btnCloseProductModal {
+            background: rgba(255,255,255,0.15) !important;
+            border: none !important;
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            display: flex; align-items:center; justify-content:center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #productModal #btnCloseProductModal:hover { background: rgba(255,255,255,0.30) !important; }
+        #productModal #btnCloseProductModal svg { color: #fff; }
+
+        #productModal .modal-body { padding: 24px 28px; gap: 14px; background: #fff; }
+        #productModal .modal-footer {
+            padding: 16px 28px;
+            border-top: 1px solid #f1f5f9;
+            background: #f8fafc;
+        }
+
+        /* Divider between sections */
+        .form-section-divider {
+            height: 1px; background: #f1f5f9;
+            margin: 4px 0;
+        }
+
+        /* Input prefix for currency */
+        .input-prefix-wrap { position: relative; }
+        .input-prefix-wrap .prefix {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 13px; font-weight: 700; color: #6b7280; pointer-events: none;
+        }
+        .input-prefix-wrap .form-input { padding-left: 32px; }
+
+        /* Badge pill for section title */
+        .section-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #f0fdf4; color: var(--primary-green);
+            border: 1px solid #bbf7d0;
+            padding: 4px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; margin-bottom: 14px;
+        }
+
+        /* Delete modal redesign */
+        #deleteModal .modal-card { border-radius: 20px; border:none; box-shadow:0 32px 80px rgba(0,0,0,0.18); }
+    </style>
+</head>
+<body>
+<div class="admin-layout-wrapper">
+    <aside class="sidebar-admin-container"></aside>
+    <main class="admin-main-content">
+        <div class="admin-header-row">
+            <div class="admin-title-group">
+                <h1>Kelola Produk</h1>
+                <p>Tambah, ubah, atau hapus produk unggulan dari katalog UMKM Digital.</p>
+            </div>
+            <button class="btn-admin primary" id="btnOpenAddProductModal" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;font-size:14px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Tambah Produk</span>
+            </button>
+        </div>
+
+        <section class="admin-panel-card">
+            <div class="panel-header-row">
+                <h2 class="panel-title">Daftar Katalog Produk</h2>
+                <span id="productCount" style="font-size:13px;color:var(--text-grey);font-weight:600;background:#f1f5f9;padding:4px 10px;border-radius:20px;"></span>
+            </div>
+            <div class="search-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="searchProduct" placeholder="Cari produk berdasarkan nama atau kategori...">
+                <select id="filterCategory" class="form-input" style="width:190px;padding:10px 14px;">
+                    <option value="">Semua Kategori</option>
+                    <option value="Kerajinan">Kerajinan</option>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Tekstil">Tekstil</option>
+                    <option value="Dekorasi">Dekorasi</option>
+                </select>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nama Produk</th>
+                            <th>Kategori</th>
+                            <th>Harga</th>
+                            <th>Stok</th>
+                            <th>Rating</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- ══════════════════════════════════════
+     Modal Tambah / Edit Produk (Premium)
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="productModal" style="display:none;">
+    <div class="modal-card">
+
+        <!-- Gradient Header -->
+        <div class="modal-header">
+            <h3 id="modalTitle">Tambah Produk Baru</h3>
+            <button type="button" id="btnCloseProductModal" aria-label="Tutup modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <form id="productForm">
+            <div class="modal-body">
+                <input type="hidden" id="productId">
+
+                <!-- Section: Info Produk -->
+                <div class="section-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    Informasi Produk
+                </div>
+
+                <div class="form-group">
+                    <label for="prodName">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        Nama Produk
+                    </label>
+                    <input type="text" id="prodName" class="form-input" placeholder="Masukkan nama lengkap produk" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prodCategory">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            Kategori
+                        </label>
+                        <select id="prodCategory" class="form-input" required>
+                            <option value="Kerajinan">🧶 Kerajinan</option>
+                            <option value="Makanan">🍱 Makanan</option>
+                            <option value="Tekstil">👗 Tekstil</option>
+                            <option value="Dekorasi">🏺 Dekorasi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="prodPrice">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            Harga (Rupiah)
+                        </label>
+                        <div class="input-prefix-wrap">
+                            <span class="prefix">Rp</span>
+                            <input type="number" id="prodPrice" class="form-input" placeholder="0" required min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prodStock">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                            Stok Awal
+                        </label>
+                        <input type="number" id="prodStock" class="form-input" placeholder="0" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="prodImage">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Path Gambar
+                        </label>
+                        <input type="text" id="prodImage" class="form-input" placeholder="Data gambar Base64 atau URL">
+                    </div>
+                </div>
+
+                <div class="form-section-divider"></div>
+
+                <!-- Section: Upload Gambar -->
+                <div class="section-pill" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Upload Foto Produk
+                </div>
+
+                <div class="form-group">
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('prodImageFile').click()">
+                        <input type="file" id="prodImageFile" accept="image/*">
+                        <div class="upload-icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        </div>
+                        <div id="uploadText" style="font-size:14px;font-weight:700;color:#374151;margin-bottom:4px;">Klik atau seret gambar ke sini</div>
+                        <div style="font-size:12px;color:#9ca3af;">Format: PNG, JPG, WEBP &middot; Maks 5MB</div>
+                        <div id="uploadPreview" style="display:none;margin-top:14px;">
+                            <img id="previewImg" src="" alt="Preview" style="max-width:100%;max-height:140px;border-radius:10px;border:2px solid #bbf7d0;box-shadow:0 4px 12px rgba(16,133,62,0.12);">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section-divider"></div>
+
+                <!-- Section: Deskripsi -->
+                <div class="section-pill" style="background:#fdf4ff;color:#7c3aed;border-color:#e9d5ff;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Deskripsi
+                </div>
+                <div class="form-group">
+                    <label for="prodDesc">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+                        Deskripsi Produk
+                    </label>
+                    <textarea id="prodDesc" class="form-input" placeholder="Tuliskan spesifikasi, bahan, keunggulan, dan detail produk..."></textarea>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn-admin secondary" onclick="document.getElementById('productModal').style.display='none'" style="border-radius:10px;padding:11px 20px;">
+                    Batal
+                </button>
+                <button type="submit" class="btn-admin primary" style="border-radius:10px;padding:11px 22px;display:flex;align-items:center;gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Simpan Produk
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal-card" style="max-width:420px;">
+        <div class="modal-header" style="background:linear-gradient(135deg,#dc2626,#ef4444);border-bottom:none;padding:22px 28px;">
+            <h3 style="color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                Hapus Produk
+            </h3>
+            <button type="button" onclick="document.getElementById('deleteModal').style.display='none'" style="background:rgba(255,255,255,0.15);border:none;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body" style="align-items:center;text-align:center;padding:28px;">
+            <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#fee2e2,#fecaca);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 8px 20px rgba(220,38,38,0.15);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </div>
+            <p style="font-weight:800;font-size:17px;color:#111827;margin-bottom:10px;">Yakin ingin menghapus?</p>
+            <p id="deleteProductName" style="font-size:14px;color:#6b7280;line-height:1.5;">Produk akan dihapus secara permanen dan tidak bisa dipulihkan.</p>
+        </div>
+        <div class="modal-footer" style="padding:16px 28px;">
+            <button type="button" class="btn-admin secondary" onclick="document.getElementById('deleteModal').style.display='none'" style="border-radius:10px;padding:11px 20px;">Batal</button>
+            <button type="button" class="btn-admin danger" id="confirmDeleteBtn" style="border-radius:10px;padding:11px 22px;display:flex;align-items:center;gap:8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                Ya, Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/notification.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+    // Image upload preview
+    document.getElementById('prodImageFile').addEventListener('change', function(e){
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(ev){
+                document.getElementById('previewImg').src = ev.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadText').textContent = '\u2705 ' + file.name;
+                document.getElementById('prodImage').value = ev.target.result;
+                document.getElementById('prodImage').dataset.base64 = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Drag & drop support
+    const uploadArea = document.getElementById('uploadArea');
+    ['dragenter','dragover'].forEach(ev => uploadArea.addEventListener(ev, e => { e.preventDefault(); uploadArea.style.borderColor='var(--primary-green)'; uploadArea.style.background='#f0fdf4'; }));
+    ['dragleave','drop'].forEach(ev => uploadArea.addEventListener(ev, e => { e.preventDefault(); uploadArea.style.borderColor=''; uploadArea.style.background=''; }));
+    uploadArea.addEventListener('drop', function(e){
+        const files = e.dataTransfer.files;
+        if(files.length && files[0].type.startsWith('image/')){
+            const reader = new FileReader();
+            reader.onload = function(ev){
+                document.getElementById('previewImg').src = ev.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadText').textContent = '\u2705 ' + files[0].name;
+                document.getElementById('prodImage').value = ev.target.result;
+                document.getElementById('prodImage').dataset.base64 = ev.target.result;
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    });
+</script>
+</body>
+</html>

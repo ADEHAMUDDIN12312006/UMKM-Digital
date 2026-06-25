@@ -1,0 +1,74 @@
+<div class="brand-section">
+    <a href="index.html" class="brand-logo">UMKM Digital</a>
+    <ul class="nav-links">
+        <li><a href="index.html" class="nav-link" id="navHome">Home</a></li>
+        <li><a href="index.html#product-section" class="nav-link" id="navProducts">Products</a></li>
+        <li id="navDashboardItem" style="display:none;"><a href="pages/dashboard-pembeli.html" class="nav-link" id="navDashboard">Dashboard</a></li>
+        <li id="navAdminItem" style="display:none;"><a href="pages/dashboard-admin.html" class="nav-link" id="navAdmin">Panel Admin</a></li>
+    </ul>
+</div>
+
+<div class="search-bar">
+    <span class="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </span>
+    <input type="text" class="search-input" id="globalSearchInput" placeholder="Cari produk lokal unggulan...">
+</div>
+
+<div class="header-actions">
+    <!-- Shopping Cart Icon with Badge -->
+    <button class="action-btn" id="btnCartHeader" aria-label="Keranjang belanja" onclick="window.location.href='pages/keranjang.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-badge" id="cartBadgeCount">0</span>
+    </button>
+    
+    <!-- Notification Bell Icon -->
+    <button class="action-btn" id="btnNotificationHeader" aria-label="Notifikasi" onclick="window.location.href='pages/notifikasi.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+    </button>
+    
+    <!-- User Profile Dropdown -->
+    <div class="user-profile-menu" style="position: relative; display: inline-block;">
+        <div class="user-profile" id="userProfileBtn" aria-label="Profil pengguna">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f5927" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <div class="dropdown-menu" id="profileDropdown" style="display: none; position: absolute; right: 0; top: 52px; background: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.12); width: 220px; z-index: 1001; padding: 6px 0; overflow: hidden;">
+            <!-- User Info Header -->
+            <div id="userInfoHeader" style="padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 13px; font-weight: 700; color: #111827;">Tamu</div>
+            
+            <!-- Belum login: Masuk -->
+            <a href="pages/login.html" class="dropdown-item" id="menuLogin" style="display: block; padding: 10px 16px; font-size: 14px; color: #374151; text-decoration: none; transition: background 0.2s;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;margin-top:-2px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Masuk
+            </a>
+            
+            <!-- Sudah login: Lihat Profil -->
+            <a href="pages/profile.html" class="dropdown-item" id="menuProfile" style="display: none; padding: 10px 16px; font-size: 14px; color: #374151; text-decoration: none; transition: background 0.2s;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px; margin-top: -2px;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Lihat Profil
+            </a>
+            
+            <!-- Logout -->
+            <a href="#" class="dropdown-item" id="menuLogout" style="display: none; padding: 10px 16px; font-size: 14px; color: #ef4444; text-decoration: none; transition: background 0.2s; border-top: 1px solid #f3f4f6; margin-top: 4px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;margin-top:-2px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>

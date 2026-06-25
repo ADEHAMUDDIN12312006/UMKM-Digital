@@ -1,0 +1,94 @@
+{
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(css|js|image|icons|components|pages)/(.*)",
+      "dest": "/$1/$2"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/login",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/register",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/dashboard-admin",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/dashboard-pembeli",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/management-produk",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/management-stok",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/kelola-pelanggan",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/kelola-transaksi",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/laporan-penjualan",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/backup-data",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/detail-produk",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/keranjang",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/checkout",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/pembayaran-qris",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/upload-bukti",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/verifikasi-pembayaran",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/riwayat-transaksi",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/notifikasi",
+      "dest": "/app.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/app.py"
+    }
+  ]
+}

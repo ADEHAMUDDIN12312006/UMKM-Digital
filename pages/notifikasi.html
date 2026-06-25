@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifikasi - UMKM Digital</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ===== NAVBAR ===== */
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .brand-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f5927;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 24px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #0f5927;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            background: #0f5927;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .user-profile:hover {
+            background: #c8e6c9;
+        }
+
+        .profile-dropdown a:hover {
+            background: #f3f4f6;
+        }
+
+        .profile-dropdown a:first-child:hover {
+            color: #0f5927;
+        }
+
+        /* ===== NOTIF PAGE ===== */
+        .notif-page-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .notif-page-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .notif-page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .notif-bell-icon {
+            font-size: 28px;
+        }
+
+        .notif-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .notif-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .notif-tab:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .notif-tab.active {
+            background: #0f5927;
+            color: white;
+        }
+
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 20px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notif-item:hover {
+            border-color: #0f5927;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+
+        .notif-item.unread {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .notif-item.unread:hover {
+            border-color: #0f5927;
+        }
+
+        .notif-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+
+        .notif-item.unread .notif-icon-wrapper {
+            background: white;
+            border-color: #bbf7d0;
+        }
+
+        .notif-icon-wrapper svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .notif-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-title-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+
+        .notif-item.unread .notif-title-text {
+            color: #0f5927;
+        }
+
+        .notif-desc {
+            font-size: 13.5px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .notif-time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .notif-unread-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0f5927;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .notif-item.read .notif-unread-dot {
+            display: none;
+        }
+
+        /* ===== FOOTER ===== */
+        .main-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 4%;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            margin-top: 40px;
+        }
+
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f5927;
+            text-decoration: none;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .footer-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #0f5927;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .main-header {
+                padding: 0 16px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .notif-page-container {
+                padding: 24px 16px 60px;
+            }
+
+            .notif-page-title {
+                font-size: 24px;
+            }
+
+            .main-footer {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <!-- 1. Header Component (Top Navigation - Injected dynamically) -->
+    <header class="main-header"></header>
+
+    <!-- ===== NOTIF CONTENT ===== -->
+    <main class="notif-page-container">
+        <div class="notif-page-header">
+            <h1 class="notif-page-title">
+                <span class="notif-bell-icon">🔔</span>
+                <span>Notifikasi</span>
+            </h1>
+        </div>
+
+        <div class="notif-tabs">
+            <button class="notif-tab active" data-filter="all">Semua</button>
+            <button class="notif-tab" data-filter="transaksi">Transaksi</button>
+            <button class="notif-tab" data-filter="promo">Promo</button>
+            <button class="notif-tab" data-filter="sistem">Sistem</button>
+        </div>
+
+        <div class="notif-list" id="notifList">
+            <!-- Will be populated dynamically via JavaScript -->
+        </div>
+
+        <!-- Flow Progress Steps (Use Case) -->
+        <div style="margin: 32px 0 8px 0;">
+            <div style="display:flex; align-items:center; justify-content:center; gap:0; font-family:'Inter',sans-serif; font-size:11px; flex-wrap:wrap;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#86efac; color:#0f5927; display:flex; align-items:center; justify-content:center; font-size:16px;">✓</div>
+                    <span style="color:#6b7280; text-align:center;">Pembayaran<br>QRIS</span>
+                </div>
+                <div style="width:40px; height:2px; background:#0f5927; margin-bottom:18px;"></div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#86efac; color:#0f5927; display:flex; align-items:center; justify-content:center; font-size:16px;">✓</div>
+                    <span style="color:#6b7280; text-align:center;">Upload Bukti<br>Pembayaran</span>
+                </div>
+                <div style="width:40px; height:2px; background:#0f5927; margin-bottom:18px;"></div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#0f5927; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">3</div>
+                    <span style="color:#0f5927; font-weight:700; text-align:center;">Notifikasi</span>
+                </div>
+                <div style="width:40px; height:2px; background:#d1fae5; margin-bottom:18px;"></div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#d1fae5; color:#6b7280; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">4</div>
+                    <span style="color:#6b7280; text-align:center;">Riwayat<br>Transaksi</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA: Lanjut ke Riwayat Transaksi -->
+        <div style="text-align:center; margin: 16px 0 40px 0;">
+            <a href="riwayat-transaksi.html" style="display:inline-flex; align-items:center; gap:8px; padding:14px 28px; background:#0f5927; color:white; border-radius:10px; font-size:15px; font-weight:600; text-decoration:none; font-family:'Inter',sans-serif; transition:all 0.2s; box-shadow:0 4px 12px rgba(15,89,39,0.2);">
+                <span>Lihat Riwayat Transaksi</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+    </main>
+
+    <!-- 5. Footer Component (Injected dynamically) -->
+    <footer class="main-footer"></footer>
+
+    <script src="../js/notification.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const tabs = document.querySelectorAll('.notif-tab');
+
+            // Load notifications from API
+            loadNotifications();
+
+            function loadNotifications() {
+                const notifList = document.getElementById('notifList');
+                if (!notifList) return;
+
+                fetch('../api/notifications')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            renderNotifications(data.notifications);
+                        } else {
+                            notifList.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-grey);">Gagal memuat notifikasi.</div>';
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error fetching notifications:', err);
+                        notifList.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-grey);">Gagal menghubungkan ke server.</div>';
+                    });
+            }
+
+            function renderNotifications(notifications) {
+                const notifList = document.getElementById('notifList');
+                const activeFilter = document.querySelector('.notif-tab.active')?.getAttribute('data-filter') || 'all';
+
+                notifList.innerHTML = '';
+
+                let filtered = notifications;
+                if (activeFilter !== 'all') {
+                    filtered = notifications.filter(n => n.category === activeFilter);
+                }
+
+                if (filtered.length === 0) {
+                    notifList.innerHTML = '<div style="text-align:center; padding:60px 20px; color:var(--text-grey);"><div style="font-size:48px; margin-bottom:12px;">📭</div><div style="font-size:16px; font-weight:700; color:var(--text-dark);">Tidak Ada Notifikasi</div><div style="font-size:13px; margin-top:4px;">Belum ada notifikasi di kategori ini.</div></div>';
+                    return;
+                }
+
+                filtered.forEach(notif => {
+                    const item = document.createElement('div');
+                    item.className = 'notif-item ' + (notif.read ? 'read' : 'unread');
+                    item.setAttribute('data-category', notif.category);
+                    item.setAttribute('data-id', notif.id);
+                    
+                    const iconColor = notif.icon_color || notif.iconColor || '#0f5927';
+                    const iconSvg = notif.icon_svg || notif.iconSvg || '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>';
+
+                    item.innerHTML = `
+                        <div class="notif-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                ${iconSvg}
+                            </svg>
+                        </div>
+                        <div class="notif-content">
+                            <div class="notif-title-text">${notif.title}</div>
+                            <div class="notif-desc">${notif.desc}</div>
+                            <div class="notif-time">${notif.time}</div>
+                        </div>
+                        <div class="notif-unread-dot"></div>
+                    `;
+
+                    item.addEventListener('click', function() {
+                        if (this.classList.contains('unread')) {
+                            this.classList.remove('unread');
+                            this.classList.add('read');
+                            
+                            // Update read status in backend
+                            fetch(`../api/notifications/${notif.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' }
+                            })
+                            .catch(err => console.error('Error updating notification status:', err));
+                        }
+                    });
+
+                    notifList.appendChild(item);
+                });
+            }
+
+            // Override tab click to re-render
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadNotifications();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

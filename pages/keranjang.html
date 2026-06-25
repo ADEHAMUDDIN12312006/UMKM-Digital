@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja - UMKM Digital</title>
+    <!-- Custom CSS Links -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cart.css">
+<base target="_blank">
+</head>
+<body>
+    <!-- 1. Header Component (Top Navigation - Injected dynamically) -->
+    <header class="main-header"></header>
+
+    <!-- Back Button -->
+    <div class="back-btn-container">
+        <a href="javascript:void(0);" onclick="if(window.history.length > 1) { window.history.back(); } else { window.location.href = '../index.html'; }" class="btn-back" target="_self">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Kembali ke Halaman Sebelumnya</span>
+        </a>
+    </div>
+
+    <!-- Main Container -->
+    <main class="cart-container">
+        <!-- Left Side: Table of items -->
+        <section class="cart-main">
+            <!-- Will be dynamically populated via js/cart.js -->
+        </section>
+
+        <!-- Right Side: Order Summary -->
+        <section class="cart-summary" id="cartSummaryContainer">
+            <h3 class="summary-title">Ringkasan Belanja</h3>
+
+            <!-- Promo Voucher section -->
+            <div class="promo-block">
+                <label style="font-size: 13px; font-weight:700; color:#374151;">Punya Kode Promo?</label>
+                <div class="promo-input-row">
+                    <input type="text" id="promoInput" class="promo-input" placeholder="Contoh: MULAIDIGITAL">
+                    <button type="button" class="btn-promo-apply" id="btnPromoApply">Gunakan</button>
+                </div>
+            </div>
+
+            <!-- Pricing Details -->
+            <div style="margin-bottom: 20px;">
+                <div class="pricing-row-cart">
+                    <span>Total Harga (Subtotal)</span>
+                    <span id="sumSubtotal">Rp 0</span>
+                </div>
+                <div class="pricing-row-cart">
+                    <span>Biaya Pengiriman</span>
+                    <span id="sumShipping">Rp 15.000</span>
+                </div>
+                <div class="pricing-row-cart">
+                    <span>Biaya Layanan</span>
+                    <span id="sumService">Rp 2.000</span>
+                </div>
+                <div class="pricing-row-cart" id="sumDiscountRow" style="display: none; color: #10853e; font-weight: 600;">
+                    <span>Diskon Promo</span>
+                    <span id="sumDiscount">- Rp 0</span>
+                </div>
+
+                <!-- Total -->
+                <div class="pricing-row-cart total">
+                    <span>Total Pembayaran</span>
+                    <span id="sumTotal">Rp 17.000</span>
+                </div>
+            </div>
+
+            <!-- Checkout Action Button -->
+            <button class="btn-checkout-cart" id="btnCheckoutCart">
+                Lanjutkan Ke Checkout
+            </button>
+        </section>
+    </main>
+
+    <!-- 5. Footer Component (Injected dynamically) -->
+    <footer class="main-footer"></footer>
+
+    <!-- Scripts -->
+    <script src="../js/notification.js"></script>
+    <script src="../js/cart.js"></script>
+
+    <!-- Script untuk menghapus pencarian di halaman keranjang -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tunggu navbar selesai di-inject (notification.js berjalan lebih dulu)
+            setTimeout(function() {
+                const searchBar = document.querySelector('.search-bar');
+                if (searchBar) {
+                    searchBar.style.display = 'none';
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

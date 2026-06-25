@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="../js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Transaksi - UMKM Digital</title>
+    <!-- Custom CSS Links -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        .riwayat-container {
+            max-width: 1000px;
+            margin: 40px auto 64px auto;
+            padding: 0 4%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. Header Component (Top Navigation - Injected dynamically) -->
+    <header class="main-header"></header>
+
+    <main class="riwayat-container">
+        <div class="dashboard-card" style="height: auto; min-height: 400px; padding: 32px;">
+            <h3 class="card-title">
+                <!-- Receipt icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M19 4v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Riwayat Transaksi Saya</span>
+            </h3>
+
+            <div class="tx-table-container">
+                <table class="tx-table">
+                    <thead>
+                        <tr>
+                            <th>No. Transaksi</th>
+                            <th>Tanggal</th>
+                            <th>Total Pembayaran</th>
+                            <th>Status Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody id="txTableBody">
+                        <!-- Will be dynamically populated via js/dashboard.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Flow Progress Steps (Use Case - All Complete) -->
+            <div style="margin: 36px 0 8px 0;">
+                <div style="display:flex; align-items:center; justify-content:center; gap:0; font-family:'Inter',sans-serif; font-size:11px; flex-wrap:wrap;">
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#86efac; color:#0f5927; display:flex; align-items:center; justify-content:center; font-size:16px;">✓</div>
+                        <span style="color:#6b7280; text-align:center;">Pembayaran<br>QRIS</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#0f5927; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#86efac; color:#0f5927; display:flex; align-items:center; justify-content:center; font-size:16px;">✓</div>
+                        <span style="color:#6b7280; text-align:center;">Upload Bukti<br>Pembayaran</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#0f5927; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#86efac; color:#0f5927; display:flex; align-items:center; justify-content:center; font-size:16px;">✓</div>
+                        <span style="color:#6b7280; text-align:center;">Notifikasi</span>
+                    </div>
+                    <div style="width:40px; height:2px; background:#0f5927; margin-bottom:18px;"></div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                        <div style="width:32px; height:32px; border-radius:50%; background:#0f5927; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">4</div>
+                        <span style="color:#0f5927; font-weight:700; text-align:center;">Riwayat<br>Transaksi</span>
+                    </div>
+                </div>
+                <p style="text-align:center; color:#6b7280; font-size:13px; margin-top:12px; font-family:'Inter',sans-serif;">🎉 Transaksi Anda selesai! Terima kasih telah berbelanja di UMKM Digital.</p>
+            </div>
+
+            <!-- Back to Dashboard button -->
+            <div style="text-align:center; margin: 16px 0 8px 0;">
+                <a href="dashboard-pembeli.html" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px; background:#f0fdf4; color:#0f5927; border:1.5px solid #0f5927; border-radius:10px; font-size:14px; font-weight:600; text-decoration:none; font-family:'Inter',sans-serif; transition:all 0.2s;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Kembali ke Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 5. Footer Component (Injected dynamically) -->
+    <footer class="main-footer"></footer>
+
+    <!-- Scripts -->
+    <script src="../js/notification.js"></script>
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
